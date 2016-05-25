@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>BorgunRPGNet</id>
+    <version>$version$</version>
+    <title>.Net library for Borgun RPG</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://docs.borgun.is/paymentgateways/bapi</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Summary of changes.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>Borgun RPG BAPI</tags>
+  </metadata>
+</package>
