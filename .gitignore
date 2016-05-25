@@ -271,3 +271,4 @@ libs/
 
 *.v2.ncrunchsolution
 *.v2.ncrunchproject
+*.nuspec
