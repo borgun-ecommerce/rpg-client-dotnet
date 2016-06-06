@@ -6,7 +6,7 @@ namespace BorgunPayment.Model
     {
         Task<TokenSingleResponse> CreateAsync(TokenSingleRequest req);
 
-        Task<TokenSingleResponse> DeleteAsync(string token);
+        Task<TokenSingleResponse> DisableAsync(string token);
 
         Task<TokenSingleResponse> GetAsync(string token);
     }

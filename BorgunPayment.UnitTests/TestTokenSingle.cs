@@ -39,10 +39,10 @@ namespace BorgunPayment.UnitTests
         }
 
         [TestMethod]
-        public void TestDelete()
+        public void TestDisable()
         {
             RPGClient client = new RPGClient("myKey", "http://www.borgun.is/", new HttpMessageHandlerMock());
-            TokenSingleResponse response = client.TokenSingle.DeleteAsync("testtoken").Result;
+            TokenSingleResponse response = client.TokenSingle.DisableAsync("testtoken").Result;
             Assert.AreEqual((int)HttpStatusCode.OK, response.StatusCode);
             Assert.IsNull(response.Token);
         }

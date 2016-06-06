@@ -112,7 +112,7 @@ namespace BorgunPayment.IntegrationTests
         }
 
         [TestMethod]
-        public void TestDeleteToken()
+        public void TestDisableToken()
         {
             TokenSingleRequest req = new TokenSingleRequest()
             {
@@ -127,16 +127,16 @@ namespace BorgunPayment.IntegrationTests
             Assert.IsNotNull(response.Token);
             Assert.IsFalse(String.IsNullOrEmpty(response.Token.Token));
 
-            TokenSingleResponse tokenResponse = client.TokenSingle.DeleteAsync(response.Token.Token).Result;
+            TokenSingleResponse tokenResponse = client.TokenSingle.DisableAsync(response.Token.Token).Result;
             Assert.AreEqual((int)HttpStatusCode.NoContent, tokenResponse.StatusCode);
             tokenResponse = client.TokenSingle.GetAsync(response.Token.Token).Result;
             Assert.AreEqual(response.Token.Token, tokenResponse.Token.Token);
             Assert.IsFalse(tokenResponse.Token.Enabled);
 
-            tokenResponse = client.TokenSingle.DeleteAsync("InvalidToken").Result;
+            tokenResponse = client.TokenSingle.DisableAsync("InvalidToken").Result;
             Assert.AreEqual((int)HttpStatusCode.BadRequest, tokenResponse.StatusCode);
 
-            tokenResponse = client.TokenSingle.DeleteAsync("ts_invalidtoken").Result;
+            tokenResponse = client.TokenSingle.DisableAsync("ts_invalidtoken").Result;
             Assert.AreEqual((int)HttpStatusCode.NotFound, tokenResponse.StatusCode);
         }
     }

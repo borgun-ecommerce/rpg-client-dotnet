@@ -14,7 +14,7 @@ namespace BorgunPayment.Model
         public string ActionCode { get; set; }
 
         /// <summary>
-        /// Message of form error occurs.
+        /// Message if form error occurs.
         /// </summary>
         public string Message { get; set; }
     }

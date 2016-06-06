@@ -58,10 +58,10 @@ namespace BorgunPayment.API
             return tokenRes;
         }
 
-        public async Task<TokenMultiResponse> DeleteAsync(string token)
+        public async Task<TokenMultiResponse> DisableAsync(string token)
         {
             TokenMultiResponse tokenRes = new TokenMultiResponse();
-            HttpResponseMessage httpRes = await this.client.DeleteAsync("api/token/multi/" + token);
+            HttpResponseMessage httpRes = await this.client.PutAsync("api/token/multi/" + token + "/disable", null);
             tokenRes.StatusCode = (int)httpRes.StatusCode;
             return tokenRes;
         }

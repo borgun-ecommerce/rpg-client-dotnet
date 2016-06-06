@@ -113,7 +113,7 @@ namespace BorgunPayment.IntegrationTests
         }
 
         [TestMethod]
-        public void TestDeleteToken()
+        public void TestDisableToken()
         {
             TokenMultiRequest req = new TokenMultiRequest()
             {
@@ -127,16 +127,16 @@ namespace BorgunPayment.IntegrationTests
             Assert.IsNotNull(response.Token);
             Assert.IsFalse(String.IsNullOrEmpty(response.Token.Token));
 
-            TokenMultiResponse tokenResponse = client.TokenMulti.DeleteAsync(response.Token.Token).Result;
+            TokenMultiResponse tokenResponse = client.TokenMulti.DisableAsync(response.Token.Token).Result;
             Assert.AreEqual((int)HttpStatusCode.NoContent, tokenResponse.StatusCode);
             tokenResponse = client.TokenMulti.GetAsync(response.Token.Token).Result;
             Assert.AreEqual(response.Token.Token, tokenResponse.Token.Token);
             Assert.IsFalse(tokenResponse.Token.Enabled);
 
-            tokenResponse = client.TokenMulti.DeleteAsync("InvalidToken").Result;
+            tokenResponse = client.TokenMulti.DisableAsync("InvalidToken").Result;
             Assert.AreEqual((int)HttpStatusCode.BadRequest, tokenResponse.StatusCode);
 
-            tokenResponse = client.TokenMulti.DeleteAsync("tm_invalidtoken").Result;
+            tokenResponse = client.TokenMulti.DisableAsync("tm_invalidtoken").Result;
             Assert.AreEqual((int)HttpStatusCode.NotFound, tokenResponse.StatusCode);
         }
     }

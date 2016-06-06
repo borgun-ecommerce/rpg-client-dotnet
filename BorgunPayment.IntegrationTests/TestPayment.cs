@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -75,6 +76,96 @@ namespace BorgunPayment.IntegrationTests
             client = new RPGClient("InvalidKey", this.uri);
             response = client.Payment.CreateAsync(req).Result;
             Assert.AreEqual((int)HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+        
+        [TestMethod]
+        public void TestCapture()
+        {
+            PaymentRequest req = new PaymentRequest()
+            {
+                TransactionType = TransactionTypes.PreAuthorization,
+                PaymentMethod = new PaymentRequestMethod()
+                {
+                    PaymentType = PaymentTypes.Card,
+                    PAN = this.testPan,
+                    ExpMonth = this.testExpMonth,
+                    ExpYear = this.testExpYear
+                },
+                Amount = 100,
+                Currency = "352",
+                OrderId = "IntegrTest01",
+                TransactionDate = DateTime.Now
+            };
+
+            RPGClient client = new RPGClient(this.config.AppSettings.Settings["PrivateToken"].Value, this.uri);
+            PaymentTransactionResponse response = client.Payment.CreateAsync(req).Result;
+            Assert.AreEqual((int)HttpStatusCode.Created, response.StatusCode);
+
+            PaymentCaptureResponse captureResponse = client.Payment.CaptureAsync(response.Transaction.TransactionId).Result;
+            Assert.AreEqual(200, captureResponse.StatusCode);
+
+            captureResponse = client.Payment.CaptureAsync(response.Transaction.TransactionId).Result;
+            Assert.AreEqual(400, captureResponse.StatusCode);
+        }
+        
+        [TestMethod]
+        public void TestCancel()
+        {
+            PaymentRequest req = new PaymentRequest()
+            {
+                TransactionType = TransactionTypes.PreAuthorization,
+                PaymentMethod = new PaymentRequestMethod()
+                {
+                    PaymentType = PaymentTypes.Card,
+                    PAN = this.testPan,
+                    ExpMonth = this.testExpMonth,
+                    ExpYear = this.testExpYear
+                },
+                Amount = 100,
+                Currency = "352",
+                OrderId = "IntegrTest01",
+                TransactionDate = DateTime.Now
+            };
+
+            RPGClient client = new RPGClient(this.config.AppSettings.Settings["PrivateToken"].Value, this.uri);
+            PaymentTransactionResponse response = client.Payment.CreateAsync(req).Result;
+            Assert.AreEqual((int)HttpStatusCode.Created, response.StatusCode);
+
+            PaymentCancelResponse cancelResponse = client.Payment.CancelAsync(response.Transaction.TransactionId).Result;
+            Assert.AreEqual(200, cancelResponse.StatusCode);
+
+            cancelResponse = client.Payment.CancelAsync(response.Transaction.TransactionId).Result;
+            Assert.AreEqual(400, cancelResponse.StatusCode);
+        }
+
+        [TestMethod]
+        public void TestRefund()
+        {
+            PaymentRequest req = new PaymentRequest()
+            {
+                TransactionType = TransactionTypes.Sale,
+                PaymentMethod = new PaymentRequestMethod()
+                {
+                    PaymentType = PaymentTypes.Card,
+                    PAN = this.testPan,
+                    ExpMonth = this.testExpMonth,
+                    ExpYear = this.testExpYear
+                },
+                Amount = 100,
+                Currency = "352",
+                OrderId = "IntegrTest01",
+                TransactionDate = DateTime.Now
+            };
+
+            RPGClient client = new RPGClient(this.config.AppSettings.Settings["PrivateToken"].Value, this.uri);
+            PaymentTransactionResponse response = client.Payment.CreateAsync(req).Result;
+            Assert.AreEqual((int)HttpStatusCode.Created, response.StatusCode);
+
+            PaymentRefundResponse cancelResponse = client.Payment.RefundAsync(response.Transaction.TransactionId).Result;
+            Assert.AreEqual(200, cancelResponse.StatusCode);
+
+            cancelResponse = client.Payment.RefundAsync(response.Transaction.TransactionId).Result;
+            Assert.AreEqual(400, cancelResponse.StatusCode);
         }
     }
 }
